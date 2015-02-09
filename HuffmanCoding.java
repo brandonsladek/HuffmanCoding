@@ -271,7 +271,8 @@ public class HuffmanCoding {
 	} // end of enter method
 	
 	private static void show() {
-		//displayTree();
+		displayTree();
+		//pq.printRoot();
 		System.out.println("------------------------------------------------------------");
 		System.out.println();
 	} // end of show method
@@ -383,7 +384,7 @@ public class HuffmanCoding {
 			Node node3 = pq.mergeNodes(node1, node2);
 			pq.insert(node3);
 		}
-		huffmanRoot = pq.remove();
+		huffmanRoot = pq.returnRoot();
 	} // end of buildHuffmanTree method
 	
 	// traverse the huffman tree and build the encoding map
@@ -417,40 +418,46 @@ public class HuffmanCoding {
 	 * 	- changed ch, left, and right fields for Nodes
 	 */
 	public static void displayTree() {
-		Stack<Node> globalStack = new Stack<Node>();
-		globalStack.push(huffmanRoot);
-		int nBlanks = 32;
-		boolean isRowEmpty = false;
-		System.out.println("------------------------------------------------------------");
-		while (isRowEmpty==false) {
-			Stack<Node> localStack = new Stack<Node>();
-			isRowEmpty = true;
-			for(int j=0; j<nBlanks; j++)
-				System.out.print(' ');
-			while (globalStack.isEmpty() == false) {
-				Node temp = (Node) globalStack.pop();
-				if (temp != null) {
-					System.out.print(temp.ch);
-					localStack.push(temp.left);
-					localStack.push(temp.right);
-					if(temp.left != null ||
-							temp.right != null)
-						isRowEmpty = false;
-				}
-				else {
-					System.out.print("--");
-					localStack.push(null);
-					localStack.push(null);
-				}
-				for(int j=0; j<nBlanks*2-2; j++)
+			Stack<Node> globalStack = new Stack<Node>();
+			globalStack.push(huffmanRoot);
+			int nBlanks = 32;
+			boolean isRowEmpty = false;
+			System.out.println(".............................................................");
+			
+			while(isRowEmpty==false) {
+				Stack<Node> localStack = new Stack<Node>();
+				isRowEmpty = true;
+				for(int j=0; j<nBlanks; j++)
 					System.out.print(' ');
-			} // end while globalStack not empty
-			System.out.println();
-			nBlanks /= 2;
-			while(localStack.isEmpty()==false)
-				globalStack.push(localStack.pop());
-		} // end while isRowEmpty is false
-		System.out.println("------------------------------------------------------------");
-	} // end displayTree() method
-
+				
+				while(globalStack.isEmpty()==false) {
+					Node temp = (Node)globalStack.pop();
+					
+					if(temp != null) {
+						System.out.print((char)temp.ch +""+ (int)temp.freq);
+						localStack.push(temp.left);
+						localStack.push(temp.right);
+						
+						if(temp.left != null ||
+								temp.right != null)
+									isRowEmpty = false;
+					}
+					else {
+						System.out.print("--");
+						localStack.push(null);
+						localStack.push(null);
+					}
+					
+					for(int j=0; j<nBlanks*2-2; j++)
+						System.out.print(' ');
+				} // end while globalStack not empty
+				System.out.println();
+				nBlanks /= 2;
+				
+				while(localStack.isEmpty()==false)
+					globalStack.push(localStack.pop());
+			} // end while isRowEmpty is false
+			System.out.println(".............................................................");
+		} // end displayTree()
+	
  } // end of HuffmanTree class
