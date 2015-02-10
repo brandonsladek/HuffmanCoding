@@ -28,12 +28,15 @@ public class HuffmanCoding {
 	
 	
 	public static void main(String[] args) {
+		
+		// variable for scanner input, main five functions
 		String choice;
 		
+		// while user doesn't input "quit"
 		while(!done) {
 			System.out.print("Enter word: enter, show, encode, decode, quit: ");
+			// read in user input
 			choice = scanner.next();
-			
 			switch(choice) {
 			case "enter":
 				try {
@@ -68,23 +71,30 @@ public class HuffmanCoding {
 		
 	System.out.print("Enter text lines, terminate with $ ");
 	System.out.print(">>> ");
+	
+	// blank string for user input
 	text = "";
+	
+	// clear frequency table to all zeros
 	cleanFrequencyTable();
 	boolean dollarSignStop = false;
 	
+	// while $ has not been parsed from text string
 	while(!dollarSignStop) {
+		// read from in buffer
 		char c = (char) in.read();
-		int ascii = (int) c;
-		if(ascii == 36)
+		if((int) c == 36)
+			// dollar sign parsed
 			dollarSignStop = true;
 		else {
+		// append character to text string
 		text += c;
 		}
 	}
 	textString = text.toCharArray();
 	
 	for(int i = 0; i < textString.length; i++) {
-		
+		// add to frequency table
 		switch(textString[i]) {
 		case 'a':
 			frequencyTable[0] = frequencyTable[0] + 1;
@@ -256,11 +266,9 @@ public class HuffmanCoding {
 	buildHuffmanTree();
 	buildEncodingMap();
 	
-	System.out.println();
 	System.out.println("------------------------------------------------------------");
 	System.out.println("FREQUENCY TABLE: ");
 	System.out.println();
-	//System.out.println("A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ /");
 	for(int i = 0; i < frequencyTable.length-2; i++) {
 		System.out.println((char) (i+65) + ": " + frequencyTable[i]);
 	} 
@@ -271,27 +279,33 @@ public class HuffmanCoding {
 	} // end of enter method
 	
 	private static void show() {
+		// display a graphic of the huffman tree
 		displayTree();
-		//pq.printRoot();
 		System.out.println("------------------------------------------------------------");
 		System.out.println();
 	} // end of show method
 	
 	private static void encode() {
 		encodedMessage = "";
+		// convert text input string to uppercase char array (uc because encodingMap hash keys are uc)
 		String preMessageString = text.toUpperCase();
 		char[] preMessageArray = preMessageString.toCharArray();
+		
+		// current character to be encoded
 		char currentChar;
 		
+		// loop through char array
 		for (int i = 0; i < preMessageArray.length; i++) {
 			if ((int) preMessageArray[i] != 0) {
 			currentChar = preMessageArray[i];
+			// append code for character, retrieved from hashmap
 			encodedMessage += encodingMap.get(currentChar);
 			}
 		} 
 		System.out.println("------------------------------------------------------------");
 		System.out.println();
 		System.out.println("ENCODING TABLE: ");
+		// see method description
 		displayEncodingMap(encodingMap);
 		System.out.println();
 		System.out.println("NOTE: Any characters besides a-z, A-Z, space, ");
@@ -311,11 +325,16 @@ public class HuffmanCoding {
 	} // end of encode method
 	
 	private static void decode() {
+		// convert binary string to char array
 		char[] incomingMessage = encodedMessage.toCharArray();
+		
+		// string for decoded message
 		String outgoingMessage = "";
+		
 		Node current = huffmanRoot;
+		
 		for (int i = 0; i < incomingMessage.length; i++) {
-			// traverse the tree and print out value when each time a leaf is reached
+			// traverse the tree and print out value each time a leaf is reached
 			char c = incomingMessage[i];
 			switch(c) {
 				case '0':
@@ -328,8 +347,12 @@ public class HuffmanCoding {
 					break;
 			} // end of switch statement
 			
+			// if node has no children, it is a leaf, thus a character node
 			if (current.left == null & current.right == null) {
+				// append character to decoded message string
 				outgoingMessage += current.ch;
+				
+				// reset current at root of huffman tree
 				current = huffmanRoot;
 			}
 			
@@ -381,9 +404,12 @@ public class HuffmanCoding {
 		while(pq.getNumItems() > 1) {
 			Node node1 = pq.remove();
 			Node node2 = pq.remove();
+			
+			// combine node1 and node2 and insert the parent back into the priority queue
 			Node node3 = pq.mergeNodes(node1, node2);
 			pq.insert(node3);
 		}
+		// the last node left is the root of the huffman tree
 		huffmanRoot = pq.remove();
 	} // end of buildHuffmanTree method
 	
@@ -396,6 +422,7 @@ public class HuffmanCoding {
 	
 	// recursively traverse the huffman tree, build codes, and store in hash map parameter
 	private static void traverseTree(String code, HashMap<Character, String> hash, Node root) {
+		// if the node has no children, it is a leaf, thus a character node
 		if(root.left == null && root.right == null)
 			hash.put(root.ch, code);
 		if(root.left != null)
@@ -407,12 +434,21 @@ public class HuffmanCoding {
 	// print out the character encoding map
 	private static void displayEncodingMap(HashMap<Character, String> hash) {
 		for (Entry<Character, String> e : hash.entrySet()) {
+			// if character is not newline or space
+			if ((int) e.getKey() != 10 && (int) e.getKey() != 32) {
 			System.out.println(e.getKey() + " --> " + e.getValue());
+			} // if character is newline, print nl
+			else if ((int) e.getKey() == 10) {
+				System.out.println("nl" + " -> " + e.getValue());
+			} // if character is space, print sp
+			else {
+				System.out.println("sp" + " -> " + e.getValue());
+			}
 		}
 	} // end of displayEncodingMap method
 	
 	/**
-	 * From given tree.java file
+	 * From tree.java file
 	 * Changes made:
 	 * 	- changed node in globalStack.push to huffmanRoot
 	 * 	- changed ch, left, and right fields for Nodes
