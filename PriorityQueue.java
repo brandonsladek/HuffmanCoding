@@ -72,14 +72,6 @@ public class PriorityQueue {
 		return numItems;
 	}
 	
-	public void printRoot() {
-		System.out.println(queArray[0].freq);
-	}
-	
-	public Node returnRoot() {
-		return queArray[0];
-	}
-	
 	public void createQueue() {
 		HashMap<Character, Integer> hash = HuffmanCoding.createFreqMap(HuffmanCoding.frequencyTable);
 		for (Entry<Character, Integer> e : hash.entrySet()) {

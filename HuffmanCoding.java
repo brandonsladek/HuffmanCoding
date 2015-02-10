@@ -384,7 +384,7 @@ public class HuffmanCoding {
 			Node node3 = pq.mergeNodes(node1, node2);
 			pq.insert(node3);
 		}
-		huffmanRoot = pq.returnRoot();
+		huffmanRoot = pq.remove();
 	} // end of buildHuffmanTree method
 	
 	// traverse the huffman tree and build the encoding map
@@ -434,7 +434,16 @@ public class HuffmanCoding {
 					Node temp = (Node)globalStack.pop();
 					
 					if(temp != null) {
+						// if the character is not a newline or space, print character
+						if((int)temp.ch != 10 && (int)temp.ch != 32) {
 						System.out.print((char)temp.ch +""+ (int)temp.freq);
+						} // if character is space, print sp
+						else if((int)temp.ch == 32) {
+							System.out.print("sp" + (int)temp.freq);
+						} // if character is newline, print nl
+						else {
+							System.out.print("nl" + (int)temp.freq);
+						}
 						localStack.push(temp.left);
 						localStack.push(temp.right);
 						
