@@ -68,13 +68,17 @@ public class PriorityQueue {
 	public boolean isFull() // true if queue is full
 	{ return (numItems == maxSize); }
 	//-------------------------------------------------------------
+	
+	// return number of items in priority queue
 	public int getNumItems() {
 		return numItems;
 	}
 	
+	// create a priority queue with the frequency hashmap values
 	public void createQueue() {
 		HashMap<Character, Integer> hash = HuffmanCoding.createFreqMap(HuffmanCoding.frequencyTable);
 		for (Entry<Character, Integer> e : hash.entrySet()) {
+			// only want characters that appeared in text string
 			if(e.getValue() != 0) {
 			Node node = new Node(e.getKey(), e.getValue(), null, null);
 			this.insert(node);
@@ -82,7 +86,9 @@ public class PriorityQueue {
 		}
 	}
 	
+	// create a subtree with node first and node second as the children
 	public Node mergeNodes(Node first, Node second) {
+		// sum of the child frequencies is the frequency of the parent
 		int newFreq = first.freq + second.freq;
 		Node newNode;
 		if (first.freq < second.freq) {
