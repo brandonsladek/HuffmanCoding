@@ -316,9 +316,9 @@ public class HuffmanCoding {
 			// keep the width of the console output at 60
 			if (i%60 == 0) {
 				System.out.println();
-			} else {
-				System.out.print(encodedMessage.charAt(i));
 			}
+            System.out.print(encodedMessage.charAt(i));
+			
 		} System.out.println();
 		System.out.println("------------------------------------------------------------");
 		System.out.println();
